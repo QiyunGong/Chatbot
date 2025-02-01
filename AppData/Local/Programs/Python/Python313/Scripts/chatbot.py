@@ -1,14 +1,14 @@
+import openai
+from dotenv import load_dotenv
 import streamlit as st
-from openai import OpenAI
 import edge_tts
 import asyncio
 import io
 import re
-from dotenv import load_dotenv
 import os
 
 load_dotenv()
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+openai.api_key = st.secrets["OPENAI_API_KEY"]  # Use openai directly
 
 # Ensure chat history is stored
 if "chat_history" not in st.session_state:
@@ -55,7 +55,6 @@ st.subheader("Get fuked, beyotch!")
 # In the first column, add the input box
 user_input = st.text_input("What do you want, you little shit?", "")
 
-
 # Send button
 if st.button("Send"):
     if user_input:
@@ -63,8 +62,8 @@ if st.button("Send"):
         st.session_state.chat_history.append({"role": "user", "content": user_input})
 
         # Get AI response with full conversation history
-        response = client.chat.completions.create(
-            model="gpt-3.5",
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
             messages=st.session_state.chat_history
         )
         bot_response = response.choices[0].message.content
