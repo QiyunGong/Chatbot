@@ -8,7 +8,9 @@ import re
 import os
 
 load_dotenv()
-openai.api_key = st.secrets["OPENAI_API_KEY"]  # Use openai directly
+
+# Initialize the OpenAI client with the API key
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Ensure chat history is stored
 if "chat_history" not in st.session_state:
@@ -62,8 +64,8 @@ if st.button("Send"):
         st.session_state.chat_history.append({"role": "user", "content": user_input})
 
         # Get AI response with full conversation history
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5",
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",  # Use the correct model name
             messages=st.session_state.chat_history
         )
         bot_response = response.choices[0].message.content
@@ -88,5 +90,3 @@ if st.button("Reset Chat"):
         {"role": "system", "content": "You always reply in this order: First, answer in simple, cute, casual Chinese like a little girl. Then, write the pinyin. Then, translate to English. Finally, assume what word the user wants to learn, explain that word in English only, with pinyin, and example usage. Never use Chinese in your explanations, only English."}
     ]
     st.rerun()
-
-# You can add more customization to the UI here (colors, themes, additional interactivity)
