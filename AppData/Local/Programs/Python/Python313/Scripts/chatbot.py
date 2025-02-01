@@ -63,7 +63,7 @@ if st.button("Send"):
 
         # Get AI response with full conversation history
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5",
             messages=st.session_state.chat_history
         )
         bot_response = response.choices[0].message.content
